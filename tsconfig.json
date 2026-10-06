@@ -18,8 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@@types/*": ["src/@types/*"]
+      "@@types/*": ["src/@types/*"],
+      "#test/*": ["test/*"]
     }
   },
-  "include": ["src", "bin"]
+  "include": ["src", "bin", "test"],
+  "exclude": ["test/fixtures"]
 }

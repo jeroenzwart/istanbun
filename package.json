@@ -39,6 +39,7 @@
   "scripts": {
     "build": "bunup",
     "typecheck": "tsc --noEmit",
+    "test": "bun test test/unit",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
