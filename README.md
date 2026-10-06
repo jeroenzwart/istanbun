@@ -108,6 +108,10 @@ above. In watch mode `run()` resolves when `bun test` exits and `onReport` is ca
 every rerun. Configuration errors throw an `IstanbunError` with a `code` such as
 `UNKNOWN_REPORTER` or `LCOV_REPORTER_NOT_CONFIGURED` and an optional `hint`.
 
+## Development
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for setup, scripts, project structure and tests.
+
 ## License
 
 MIT
