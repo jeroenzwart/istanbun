@@ -1,4 +1,7 @@
-# istanbun
+<div align="center">
+  <img src=".github/logo.svg" width="160" alt="istanbun logo">
+  <h1 style="margin: 0; padding: 0">istanbun</h1>
+</div>
 
 Istanbul coverage reporters for `bun test`.
 
