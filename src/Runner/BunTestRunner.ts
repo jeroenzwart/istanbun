@@ -1,6 +1,5 @@
 import type { Istanbun } from '@@types/Istanbun'
 import type CoveragePlan from '@/Config/CoveragePlan'
-import IstanbunError from '@/Errors/IstanbunError'
 import LcovWatcher from '@/Runner/LcovWatcher'
 import { existsSync } from 'node:fs'
 import { mkdir, mkdtemp, rm } from 'node:fs/promises'
@@ -61,8 +60,6 @@ export default class BunTestRunner {
    * @param {string[]} bunTestArguments Extra arguments for `bun test`.
    * @param {Istanbun.LcovListener} onLcovWritten Receives the lcov path after each run.
    *
-   * @throws {IstanbunError} LCOV_NOT_GENERATED when a non-watch run produced no lcov.info.
-   *
    * @public
    */
   public async run(
@@ -115,11 +112,11 @@ export default class BunTestRunner {
   }
 
   /**
-   * Single run: wait for exit, then report once.
+   * Single run: wait for exit, then report once. Bun writes no lcov.info when the run loaded no
+   * source file (only test files, a filter without matches, a syntax error); that is reported as
+   * a notice, not an error, so bun test's exit code still decides the outcome.
    *
    * @param {RunContext} context Paths and listener for this run.
-   *
-   * @throws {IstanbunError} LCOV_NOT_GENERATED
    *
    * @private
    */
@@ -127,11 +124,11 @@ export default class BunTestRunner {
     const exitCode: number = await this.spawn(context.bunTestArguments, context).exited
 
     if (existsSync(context.lcovPath) === false) {
-      throw new IstanbunError(
-        'LCOV_NOT_GENERATED',
-        `bun test exited with code ${exitCode} without writing ${context.lcovPath}`,
-        'This usually means bun test failed before running any file (e.g. a syntax error).',
+      process.stderr.write(
+        'istanbun: bun test loaded no source files, so no reports were written\n',
       )
+
+      return exitCode
     }
 
     await context.onLcovWritten(context.lcovPath)

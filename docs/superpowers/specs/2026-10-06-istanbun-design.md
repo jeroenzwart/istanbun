@@ -183,8 +183,9 @@ string[], outputDir?: string } }`. Missing file → all undefined. Unparsable fi
   on exit if a write was pending.
 - Creates the temporary directory with `fs.mkdtemp` when `plan.lcovDirectory` is
   undefined and removes it afterwards.
-- A missing lcov file after a normal run throws `LCOV_NOT_GENERATED` (happens when bun test
-  fails before running anything, e.g. a syntax error); the exit code is still propagated.
+- A missing lcov file after a normal run is not an error: Bun writes none when the run loaded
+  no source file (only test files, a filter without matches, a syntax error). istanbun prints a
+  notice, writes no reports and returns bun test's exit code.
 
 ### `Lcov/LcovParser`
 
@@ -240,7 +241,7 @@ every configuration error surfaces before `bun test` starts.
 
 ## Error handling
 
-- Error codes are SCREAMING_SNAKE_CASE strings: `LCOV_NOT_GENERATED`, `INVALID_LCOV`,
+- Error codes are SCREAMING_SNAKE_CASE strings: `LCOV_FILE_NOT_FOUND`, `INVALID_LCOV`,
   `UNKNOWN_REPORTER`, `INVALID_REPORTER_LIST` (empty array), `LCOV_REPORTER_NOT_CONFIGURED`,
   `INVALID_BUNFIG`, `WATCH_WITH_LCOV_FILE`.
 - The CLI maps codes to one-line messages; the library throws plain `Error` with the code.

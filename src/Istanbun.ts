@@ -66,7 +66,7 @@ export default class Istanbun {
    * Run `bun test` (or convert the given lcov file) and write the reports. The coverage map in
    * the result is empty when `bun test` was interrupted before it wrote any coverage.
    *
-   * @throws {IstanbunError} LCOV_FILE_NOT_FOUND, LCOV_NOT_GENERATED, INVALID_LCOV
+   * @throws {IstanbunError} LCOV_FILE_NOT_FOUND, INVALID_LCOV
    *
    * @public
    */

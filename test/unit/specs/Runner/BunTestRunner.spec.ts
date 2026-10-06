@@ -1,11 +1,19 @@
 import CoveragePlan from '@/Config/CoveragePlan'
-import IstanbunError from '@/Errors/IstanbunError'
 import BunTestRunner from '@/Runner/BunTestRunner'
 import { FIXTURE_PROJECT_DIRECTORY } from '#test/helpers/Fixtures'
 import TemporaryDirectory from '#test/helpers/TemporaryDirectory'
-import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, it, spyOn, type Mock } from 'bun:test'
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
+
+const FAILING_TEST: string = [
+  "import { sign } from './src/calculator'",
+  "import { expect, it } from 'bun:test'",
+  "it('fails', () => { expect(sign(-1)).toBe('positive') })",
+].join('\n')
+
+const PASSING_TEST_WITHOUT_SOURCES: string =
+  "import { it } from 'bun:test'\nit('passes', () => {})\n"
 
 // These specs spawn a real `bun test` in a copy of the fixture project. Watch mode is not
 // covered here: it only ends on Ctrl-C, which a spec cannot send without killing itself.
@@ -63,38 +71,61 @@ describe('@/Runner/BunTestRunner', (): void => {
     expect(existsSync(join(project.path, 'bun-coverage', 'lcov.info'))).toBe(true)
   })
 
-  it('should pass the arguments to bun test and return its exit code', async (): Promise<void> => {
+  it('should return the exit code of a failing bun test', async (): Promise<void> => {
     // Arrange
-    project.write(
-      'failing.test.ts',
-      [
-        "import { sign } from './src/calculator'",
-        "import { expect, it } from 'bun:test'",
-        "it('fails', () => { expect(sign(-1)).toBe('positive') })",
-      ].join('\n'),
-    )
+    project.write('failing.test.ts', FAILING_TEST)
     const plan: CoveragePlan = CoveragePlan.create({ test: {}, istanbun: {} }, {})
     const runner: BunTestRunner = BunTestRunner.create(project.path, plan, false)
 
     // Act
-    const exitCode: number = await runner.run(['failing'], recordLcov)
+    const exitCode: number = await runner.run([], recordLcov)
 
     // Assert
     expect(exitCode).toBe(1)
-    expect(reported[0]?.content).not.toContain('SF:calculator.test.ts')
+    expect(reported).toHaveLength(1)
   })
 
-  it('should throw LCOV_NOT_GENERATED when bun test wrote no lcov', async (): Promise<void> => {
+  it('should pass the arguments to bun test', async (): Promise<void> => {
     // Arrange
-    project.write('broken.test.ts', 'export const = ;\n')
+    project.write('failing.test.ts', FAILING_TEST)
     const plan: CoveragePlan = CoveragePlan.create({ test: {}, istanbun: {} }, {})
     const runner: BunTestRunner = BunTestRunner.create(project.path, plan, false)
 
     // Act
-    const run: Promise<number> = runner.run(['broken'], recordLcov)
+    const exitCode: number = await runner.run(['calculator'], recordLcov)
 
     // Assert
-    await expect(run).rejects.toBeInstanceOf(IstanbunError)
-    await expect(run).rejects.toThrow('without writing')
+    expect(exitCode).toBe(0)
   })
+
+  it.each([
+    ['a passing test that loads no source file', 'passing', PASSING_TEST_WITHOUT_SOURCES, 0],
+    ['a test file with a syntax error', 'broken', 'export const = ;\n', 1],
+  ])(
+    'should return the exit code without reporting for %s',
+    async (
+      _case: string,
+      name: string,
+      content: string,
+      expectedExitCode: number,
+    ): Promise<void> => {
+      // Arrange
+      project.write(`${name}.test.ts`, content)
+      const plan: CoveragePlan = CoveragePlan.create({ test: {}, istanbun: {} }, {})
+      const runner: BunTestRunner = BunTestRunner.create(project.path, plan, false)
+      const stderr: Mock<typeof process.stderr.write> = spyOn(process.stderr, 'write')
+
+      // Act
+      const exitCode: number = await runner.run([name], recordLcov)
+      const messages: unknown[] = stderr.mock.calls.map((call: unknown[]): unknown => call[0])
+      stderr.mockRestore()
+
+      // Assert
+      expect(exitCode).toBe(expectedExitCode)
+      expect(reported).toEqual([])
+      expect(messages).toEqual([
+        'istanbun: bun test loaded no source files, so no reports were written\n',
+      ])
+    },
+  )
 })
