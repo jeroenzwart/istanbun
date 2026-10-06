@@ -146,7 +146,7 @@ export default class LcovParser {
     }
 
     const existing: Lcov.FunctionRecord | undefined = record.functions.find(
-      candidate => candidate.name === name,
+      (candidate: Lcov.FunctionRecord): boolean => candidate.name === name,
     )
     if (existing === undefined) {
       record.functions.push({ name, line: 0, hits })

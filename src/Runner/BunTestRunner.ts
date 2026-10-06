@@ -75,7 +75,7 @@ export default class BunTestRunner {
       usesTemporaryDirectory,
       onLcovWritten,
     }
-    const forwardInterrupt = (): void => {
+    const forwardInterrupt: () => void = (): void => {
       this.child?.kill('SIGINT')
     }
     process.on('SIGINT', forwardInterrupt)
