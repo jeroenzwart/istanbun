@@ -1,0 +1,15 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "arrowParens": "avoid",
+  "quoteProps": "consistent",
+  "bracketSpacing": true,
+  "objectWrap": "preserve",
+  "printWidth": 100,
+  "endOfLine": "lf",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": ["^(@/|@@types/)", "<THIRD_PARTY_MODULES>", "<BUILTIN_MODULES>"],
+  "importOrderTypeScriptVersion": "5.0.0"
+}
