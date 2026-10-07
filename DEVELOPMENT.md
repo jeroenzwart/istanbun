@@ -18,6 +18,10 @@ packages for malware and supply-chain attacks before installing them, and stops 
 finding. Without a token it runs in Socket's free mode; set `SOCKET_API_TOKEN` to use your
 Socket organisation's policy instead.
 
+`bunfig.toml` also sets `minimumReleaseAge` to 3 days: `bun install` and `bun add` only resolve
+versions that have been published for at least that long, including transitive dependencies.
+Renovate waits the same 3 days before it proposes an update (`renovate.json`).
+
 ## Scripts
 
 | Command                | What it does                                                |
@@ -75,7 +79,7 @@ docs/superpowers/        Design spec and implementation plan
   workflows/             CI (ci.yml) and npm publishing (publish.yml)
   actions/setup/         Shared job setup: Bun, cached dependencies
 .shipmarkrc.yml          Shipmark release configuration
-bunfig.toml              Bun install settings (security scanner)
+bunfig.toml              Bun install settings (security scanner, minimum release age)
 ```
 
 Imports use the path aliases `@/*` (for `src/*`), `@@types/*` (for `src/@types/*`) and, in

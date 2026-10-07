@@ -3,6 +3,8 @@
   "extends": ["config:recommended", ":semanticCommits"],
   "timezone": "Europe/Amsterdam",
   "schedule": ["before 6am on monday"],
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
   "lockFileMaintenance": { "enabled": true },
   "packageRules": [
     {
