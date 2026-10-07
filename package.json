@@ -1,6 +1,6 @@
 {
   "name": "@jeroenzwart/istanbun",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Istanbul coverage reporters for bun test",
   "keywords": [
     "bun",

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1](https://github.com/jeroenzwart/istanbun/releases/tag/v1.0.1) (2026-10-07)
+
+### Bug Fixes
+
+- **renovate:** repair the invalid package rules in renovate.json ([5d21506](https://github.com/jeroenzwart/istanbun/commit/5d2150622a08664c86041dd9bfc58112bbcbda49))
+
+### Build System
+
+- scan dependencies with Socket's Bun security scanner ([6f984a9](https://github.com/jeroenzwart/istanbun/commit/6f984a9a4c7783ebbbf04dd88e2e4f437487cb40))
+- **deps:** pin @types/bun to the minimum supported Bun version ([401b1e8](https://github.com/jeroenzwart/istanbun/commit/401b1e843f9efa88ff0f2633682d477ffc772c2b))
+
+### Continuous Integration
+
+- update actions to their Node 24 releases ([a493da7](https://github.com/jeroenzwart/istanbun/commit/a493da7ca207b52efa1d8c40cd5ab326f85736d3))
 ## [1.0.0](https://github.com/jeroenzwart/istanbun/releases/tag/v1.0.0) (2026-10-07)
 
 ### Features
