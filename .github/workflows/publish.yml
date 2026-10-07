@@ -30,9 +30,15 @@ jobs:
       - name: Check that the tag matches package.json
         run: test "v$(node -p "require('./package.json').version")" = "$VERSION"
 
+      # Both release steps skip work that is already done, so a failed run can simply be rerun.
       - name: Publish to npm
         # Prereleases (v1.2.0-beta.1) go to the "next" dist-tag so they never become "latest".
         run: |
+          if npm view "$(node -p "require('./package.json').name")@${VERSION#v}" version >/dev/null 2>&1; then
+            echo "$VERSION is already on npm, skipping publish"
+            exit 0
+          fi
+
           if [[ "$VERSION" == *-* ]]; then
             npm publish --tag next
           else
@@ -43,6 +49,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "The GitHub release $VERSION already exists, skipping"
+            exit 0
+          fi
+
           awk -v version="${VERSION#v}" '
             /^## / {
               if (found) { exit }
