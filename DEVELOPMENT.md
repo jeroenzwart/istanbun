@@ -22,6 +22,7 @@ bun install
 | `bun run lint`         | Run ESLint                                                  |
 | `bun run format`       | Format everything with Prettier                             |
 | `bun run format:check` | Check formatting without writing                            |
+| `bun run release`      | Release a new version with Shipmark (see Releasing)         |
 
 ## Running the CLI locally
 
@@ -116,3 +117,33 @@ before you push:
 ```bash
 bun run format:check && bun run lint && bun run typecheck && bun run test && bun run build
 ```
+
+## Releasing
+
+Releases use [Shipmark](https://github.com/Grazulex/shipmark) locally and GitHub Actions for
+publishing.
+
+```bash
+bun run release -- --dry-run   # preview the next version and changelog
+bun run release                # bump, write CHANGELOG.md, commit, tag v<version> and push
+```
+
+Shipmark derives the version bump from the Conventional Commits since the last tag, updates
+`package.json` and `CHANGELOG.md`, commits them as `chore(release): <version>` and pushes the
+`v<version>` tag. Use `--ci patch|minor|major` to skip the prompts and `-p beta|alpha|rc` for a
+prerelease. Do not pass `--create-release`: the workflow creates the GitHub release.
+
+Pushing the tag starts `.github/workflows/publish.yml`. It runs the CI workflow first, then
+checks that the tag matches `package.json`, publishes to npm and creates a GitHub release
+from that version's section in `CHANGELOG.md`. Prereleases (`v1.2.0-beta.1`) are published under
+the npm dist-tag `next` and marked as prerelease on GitHub.
+
+npm publishing uses [trusted publishing](https://docs.npmjs.com/trusted-publishers), so the
+repository needs no npm token. One-time setup:
+
+1. Add a `repository` field to `package.json` that points at the GitHub repository; npm checks
+   it against the workflow that publishes.
+2. Publish the very first version by hand (`npm publish`), because a trusted publisher can only
+   be configured for a package that exists.
+3. On npmjs.com, open the package settings and add a trusted publisher: GitHub Actions, this
+   repository, workflow `publish.yml`.

@@ -42,7 +42,8 @@
     "test": "bun test test/unit",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "release": "shipmark release"
   },
   "dependencies": {
     "istanbul-lib-coverage": "^3.2.2",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
+    "@grazulex/shipmark": "^2.1.5",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/bun": "latest",

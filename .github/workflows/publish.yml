@@ -1,0 +1,62 @@
+name: Publish
+
+# `bun run release` (Shipmark) bumps the version, updates CHANGELOG.md and pushes a v* tag.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the GitHub release
+      id-token: write # npm trusted publishing and provenance
+    env:
+      VERSION: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      # Trusted publishing needs the npm CLI 11.5.1 or newer, which ships with Node 24.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+
+      - name: Check that the tag matches package.json
+        run: test "v$(node -p "require('./package.json').version")" = "$VERSION"
+
+      - name: Publish to npm
+        # Prereleases (v1.2.0-beta.1) go to the "next" dist-tag so they never become "latest".
+        run: |
+          if [[ "$VERSION" == *-* ]]; then
+            npm publish --tag next
+          else
+            npm publish
+          fi
+
+      - name: Create the GitHub release from the CHANGELOG.md section
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          awk -v version="${VERSION#v}" '
+            /^## / {
+              if (found) { exit }
+              if (index($0, "## " version " ") == 1 || index($0, "## [" version "]") == 1) { found = 1; next }
+            }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md || { echo "No CHANGELOG.md section for $VERSION"; exit 1; }
+
+          prerelease=()
+          if [[ "$VERSION" == *-* ]]; then
+            prerelease=(--prerelease)
+          fi
+          gh release create "$VERSION" --title "$VERSION" --notes-file release-notes.md "${prerelease[@]}"
