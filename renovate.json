@@ -1,6 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "extends": ["config:recommended", ":semanticCommits"],
+  "timezone": "Europe/Amsterdam",
+  "schedule": ["before 6am on monday"],
+  "lockFileMaintenance": { "enabled": true },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Types follow engines.bun, raise both by hand",
+      "matchPackageNames": ["@types/bun"],
+    {
+      "description": "Types follow engines.bun, raise both by hand",
+      "matchPackageNames": ["@types/bun"],
+      "enabled": false
+    }
   ]
 }
