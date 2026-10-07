@@ -12,9 +12,6 @@
     {
       "description": "Types follow engines.bun, raise both by hand",
       "matchPackageNames": ["@types/bun"],
-    {
-      "description": "Types follow engines.bun, raise both by hand",
-      "matchPackageNames": ["@types/bun"],
       "enabled": false
     }
   ]
