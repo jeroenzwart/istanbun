@@ -150,7 +150,8 @@ repository needs no npm token. One-time setup:
 
 1. Add a `repository` field to `package.json` that points at the GitHub repository; npm checks
    it against the workflow that publishes.
-2. Publish the very first version by hand (`npm publish`), because a trusted publisher can only
+2. Publish the very first version by hand (`npm publish`; `publishConfig.access` makes the
+   scoped package public), because a trusted publisher can only
    be configured for a package that exists.
 3. On npmjs.com, open the package settings and add a trusted publisher: GitHub Actions, this
    repository, workflow `publish.yml`.

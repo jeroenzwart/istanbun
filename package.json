@@ -1,5 +1,5 @@
 {
-  "name": "istanbun",
+  "name": "@jeroenzwart/istanbun",
   "version": "1.0.0",
   "description": "Istanbul coverage reporters for bun test",
   "keywords": [
@@ -17,7 +17,7 @@
   },
   "type": "module",
   "bin": {
-    "istanbun": "./dist/bin/istanbun.js"
+    "istanbun": "dist/bin/istanbun.js"
   },
   "main": "./dist/src/index.cjs",
   "module": "./dist/src/index.js",
@@ -33,6 +33,9 @@
         "default": "./dist/src/index.cjs"
       }
     }
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist"

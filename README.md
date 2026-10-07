@@ -16,8 +16,11 @@ your code. Bun's native coverage feeds the Istanbul reporting stack.
 ## Install
 
 ```bash
-bun add -d istanbun
+bun add -d @jeroenzwart/istanbun
 ```
+
+The package installs an `istanbun` command. Without installing, run it with
+`bunx @jeroenzwart/istanbun`.
 
 ## Usage
 
@@ -94,7 +97,7 @@ an lcov file. When `coverageDir` is set, istanbun reads the lcov file from there
 ## Programmatic API
 
 ```typescript
-import { Istanbun } from 'istanbun'
+import { Istanbun } from '@jeroenzwart/istanbun'
 
 const result = await Istanbun.create({
   reporters: ['html', 'text-summary'],
