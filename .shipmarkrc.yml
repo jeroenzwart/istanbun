@@ -20,7 +20,7 @@ version:
     - package.json
   tagPrefix: v
   tagMessage: Release {version}
-  commitMessage: "chore(release): {version}"
+  commitMessage: 'chore(release): {version}'
 commits:
   conventional: true
   allowCustomTypes: true
