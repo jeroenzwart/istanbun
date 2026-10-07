@@ -93,6 +93,12 @@ tests, `#test/*` (for `test/*`), never relative `../` paths.
   rule in `eslint/rules/no-negation-operator.js`. Compare explicitly instead:
   `value === false`.
 
+TypeScript is installed twice. `@typescript/native` is TypeScript 7 and provides the `tsc`
+that `bun run typecheck` uses. `typescript` is an alias for `@typescript/typescript6`, because
+TypeScript 7 ships without a JavaScript API and typescript-eslint needs one. Once
+typescript-eslint supports TypeScript 7.1, `typescript` can point at TypeScript 7 again and
+`@typescript/native` can go.
+
 ## Things to know about Bun
 
 These were measured on Bun 1.4.2 and shape the runner and config code:
