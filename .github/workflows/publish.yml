@@ -19,15 +19,12 @@ jobs:
       VERSION: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - uses: ./.github/actions/setup
       # Trusted publishing needs the npm CLI 11.5.1 or newer, which ships with Node 24.
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: bun install --frozen-lockfile
       - run: bun run build
 
       - name: Check that the tag matches package.json

@@ -6,19 +6,43 @@ on:
   pull_request:
   workflow_call:
 
+# Every job runs on its own runner; the checks run in parallel and build waits for all of them.
+# A local action must be checked out before it can be used.
 jobs:
-  check:
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
+      - uses: ./.github/actions/setup
       - run: bun run format:check
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: bun run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: bun run typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: bun run test
+
+  build:
+    needs: [format, lint, typecheck, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: bun run build
       - name: Smoke test the CLI against the fixture project
         run: cd test/fixtures/project && bun ../../../dist/bin/istanbun.js --reporter text-summary
