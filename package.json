@@ -11,6 +11,10 @@
     "test"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeroenzwart/istanbun.git"
+  },
   "type": "module",
   "bin": {
     "istanbun": "./dist/bin/istanbun.js"
