@@ -15,11 +15,10 @@
     "noEmit": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@@types/*": ["src/@types/*"],
-      "#test/*": ["test/*"]
+      "@/*": ["./src/*"],
+      "@@types/*": ["./src/@types/*"],
+      "#test/*": ["./test/*"]
     }
   },
   "include": ["src", "bin", "test"],
