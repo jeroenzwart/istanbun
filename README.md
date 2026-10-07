@@ -41,7 +41,9 @@ bunx istanbun --watch --reporter html               # re-render after every bun 
 
 The exit code is the exit code of `bun test`, so a failing suite still fails your CI. With
 `--lcov` the exit code is `0`. Invalid options, an unknown reporter or a `bunfig.toml` that
-cannot produce lcov output exit with `2` before any test runs.
+cannot produce lcov output exit with `2` before any test runs. When a run loads no source
+file at all, Bun writes no coverage; istanbun then prints a notice, writes no reports and still
+returns the exit code of `bun test`.
 
 Reporter names: `clover`, `cobertura`, `html`, `html-spa`, `json`, `json-summary`, `lcov`,
 `lcovonly`, `teamcity`, `text`, `text-lcov`, `text-summary`.

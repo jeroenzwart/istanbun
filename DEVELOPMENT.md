@@ -65,10 +65,14 @@ test/
   helpers/               Shared test helpers, imported as #test/helpers/*
   fixtures/              Fixture project and lcov files
 docs/superpowers/        Design spec and implementation plan
+.github/
+  workflows/             CI (ci.yml) and npm publishing (publish.yml)
+  actions/setup/         Shared job setup: Bun, cached dependencies
+.shipmarkrc.yml          Shipmark release configuration
 ```
 
-Imports use the path aliases `@/*` (for `src/*`) and `@@types/*` (for `src/@types/*`), never
-relative `../` paths.
+Imports use the path aliases `@/*` (for `src/*`), `@@types/*` (for `src/@types/*`) and, in
+tests, `#test/*` (for `test/*`), never relative `../` paths.
 
 ## Code style
 
@@ -89,6 +93,9 @@ These were measured on Bun 1.4.2 and shape the runner and config code:
   missing from the reports.
 - `bun test --watch` rewrites `lcov.info` on every rerun. Touching a source file does not
   trigger a rerun; only changing its content does.
+- Bun writes no `lcov.info` when a run loads no source file (only test files, a filter without
+  matches, a syntax error), even when every test passes. The runner then prints a notice and
+  returns bun test's exit code.
 - Bun ignores unknown tables in `bunfig.toml`, which is why the `[istanbun]` table is safe.
 
 ## Tests
@@ -110,9 +117,9 @@ spawn a real `bun test` in a copy of the fixture project, so its output appears 
 test results, including the failures those specs cause on purpose. Watch mode is not
 covered: it only ends on Ctrl-C.
 
-CI runs formatting, linting, type-checking, the tests, the build and a smoke test of the
-built CLI against the fixture project (`.github/workflows/ci.yml`). Run the same checks
-before you push:
+CI (`.github/workflows/ci.yml`) runs `format`, `lint`, `typecheck` and `test` as parallel
+jobs; `build` waits for all four, then builds and smoke-tests the CLI against the fixture
+project. Run the same checks before you push:
 
 ```bash
 bun run format:check && bun run lint && bun run typecheck && bun run test && bun run build
@@ -131,7 +138,7 @@ bun run release                # bump, write CHANGELOG.md, commit, tag v<version
 Shipmark derives the version bump from the Conventional Commits since the last tag, updates
 `package.json` and `CHANGELOG.md`, commits them as `chore(release): <version>` and pushes the
 `v<version>` tag. Use `--ci patch|minor|major` to skip the prompts and `-p beta|alpha|rc` for a
-prerelease. Do not pass `--create-release`: the workflow creates the GitHub release.
+prerelease. The configuration lives in `.shipmarkrc.yml`. Do not pass `--create-release`: the workflow creates the GitHub release.
 
 Pushing the tag starts `.github/workflows/publish.yml`. It runs the CI workflow first, then
 checks that the tag matches `package.json`, publishes to npm and creates a GitHub release
