@@ -37,8 +37,15 @@ jobs:
       - uses: ./.github/actions/setup
       - run: bun run test:unit
 
+  declutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: bun run declutter
+
   build:
-    needs: [format, lint, typecheck, test]
+    needs: [format, lint, typecheck, test, declutter]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
