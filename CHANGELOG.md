@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2](https://github.com/jeroenzwart/istanbun/releases/tag/v1.0.2) (2026-10-08)
+
+### Bug Fixes
+
+- **cli:** forward non-istanbun arguments to bun test ([715fda0](https://github.com/jeroenzwart/istanbun/commit/715fda085c50aa5297e0a8bb72a4a477de37c7ff))
+
+### Build System
+
+- **deps:** add FTA to cap code complexity at 60 ([00e27bd](https://github.com/jeroenzwart/istanbun/commit/00e27bd5f83b426ed37b72f53434703ca1888a8a))
+- **deps:** add Knip to report unused exports ([919d40d](https://github.com/jeroenzwart/istanbun/commit/919d40d3b1d6283141ebe780ab72f46e0916b245))
+- **renovate:** automerge lock file maintenance ([ddc0952](https://github.com/jeroenzwart/istanbun/commit/ddc0952b4a73fe66144179882af597d0c2246464))
+- **deps:** update to TypeScript 7 alongside the TypeScript 6 API ([bd01e7d](https://github.com/jeroenzwart/istanbun/commit/bd01e7d502badc872e8b7fca0caedf44ec1ec6fc))
+- wait three days before installing or proposing new versions ([13803e2](https://github.com/jeroenzwart/istanbun/commit/13803e22074f9a3d26b951f8176258b53b500262))
+
+### Chores
+
+- **deps:** update dependency typescript to v7 ([71dfd4a](https://github.com/jeroenzwart/istanbun/commit/71dfd4a002b999ee315ee46209e2215c0ab1b289))
+- **deps:** lock file maintenance ([c69076b](https://github.com/jeroenzwart/istanbun/commit/c69076b0138165698cdf80b1d168311d5ae12796))
+
+### Styles
+
+- **ci:** format the CodeQL workflow with Prettier ([5db3c2a](https://github.com/jeroenzwart/istanbun/commit/5db3c2a33f0f52a1d9ca153ee9d1d8da1bbe90a2))
 ## [1.0.1](https://github.com/jeroenzwart/istanbun/releases/tag/v1.0.1) (2026-10-07)
 
 ### Bug Fixes
