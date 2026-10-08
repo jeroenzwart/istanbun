@@ -58,13 +58,13 @@ describe('@/Cli/IstanbunCommand', (): void => {
     expect(existsSync(join(directory.path, 'coverage-final.json'))).toBe(true)
   })
 
-  it('should print an unknown option with the usage and exit with 2', async (): Promise<void> => {
+  it('should print a missing option value with the usage and exit with 2', async (): Promise<void> => {
     // Act
-    const exitCode: number = await IstanbunCommand.create(['--nope']).run()
+    const exitCode: number = await IstanbunCommand.create(['--reporter']).run()
 
     // Assert
     expect(exitCode).toBe(2)
-    expect(written(stderr)).toContain("Unknown option '--nope'")
+    expect(written(stderr)).toContain("Option '--reporter <value>' argument missing")
     expect(written(stderr)).toContain('Usage: istanbun')
   })
 

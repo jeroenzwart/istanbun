@@ -28,7 +28,8 @@ The package installs an `istanbun` command. Without installing, run it with
 bunx istanbun                                       # bun test --coverage, Istanbul text table
 bunx istanbun --reporter html --reporter text-summary
 bunx istanbun --reporter cobertura --output-dir reports/coverage
-bunx istanbun -- test/unit --bail                   # everything after -- goes to bun test
+bunx istanbun test/unit --bail                      # non-istanbun arguments go to bun test
+bunx istanbun --reporter html -- --bail             # everything after -- goes to bun test
 bunx istanbun --lcov coverage/lcov.info --reporter json   # convert an existing lcov file
 bunx istanbun --watch --reporter html               # re-render after every bun test rerun
 ```
@@ -40,11 +41,25 @@ bunx istanbun --watch --reporter html               # re-render after every bun 
 | `--lcov <path>`                  | –          | Use this lcov file instead of running `bun test`        |
 | `--watch`                        | off        | Run `bun test --watch` and regenerate after every rerun |
 | `--help`                         |            | Print usage                                             |
-| `--`                             |            | Pass the remaining arguments to `bun test`              |
+| `--`                             |            | Pass the remaining arguments to `bun test` verbatim     |
+
+Every argument that is not one of the flags above, such as `--isolate`, `--timeout 5000` or
+`test/unit`, is passed to `bun test` unchanged and in its original order.
+
+Bun removes a `--` that comes directly after the script name, so `istanbun -- --reporter junit`
+reaches istanbun as `istanbun --reporter junit` and istanbun takes `--reporter` itself. To pass
+a `bun test` argument that has the same name as an istanbun flag, put an istanbun flag before
+the `--` or double the separator:
+
+```bash
+bunx istanbun --reporter text -- --reporter junit --reporter-outfile junit.xml
+bunx istanbun -- -- --reporter junit --reporter-outfile junit.xml
+```
 
 The exit code is the exit code of `bun test`, so a failing suite still fails your CI. With
-`--lcov` the exit code is `0`. Invalid options, an unknown reporter or a `bunfig.toml` that
-cannot produce lcov output exit with `2` before any test runs. When a run loads no source
+`--lcov` the exit code is `0`. An istanbun flag without its value, an unknown reporter,
+`--watch` combined with `--lcov`, a missing `--lcov` file or a `bunfig.toml` that cannot
+produce lcov output exit with `2` before any test runs. When a run loads no source
 file at all, Bun writes no coverage; istanbun then prints a notice, writes no reports and still
 returns the exit code of `bun test`.
 

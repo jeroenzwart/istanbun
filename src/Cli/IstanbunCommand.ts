@@ -1,11 +1,12 @@
-import type { Istanbun as IstanbunTypes } from '@@types/Istanbun'
+import type { Cli, Istanbun as IstanbunTypes } from '@@types/Istanbun'
+import ArgumentParser from '@/Cli/ArgumentParser'
 import IstanbunError from '@/Errors/IstanbunError'
 import Istanbun from '@/Istanbun'
-import { parseArgs, type ParseArgsConfig } from 'node:util'
 
-const USAGE: string = `Usage: istanbun [options] [-- <bun test arguments>]
+const USAGE: string = `Usage: istanbun [options] [bun test arguments] [-- <bun test arguments>]
 
-Runs "bun test --coverage" and renders the coverage with Istanbul reporters.
+Runs "bun test --coverage" and renders the coverage with Istanbul reporters. Arguments that
+are not istanbun options are passed to bun test; everything after -- is passed verbatim.
 
 Options:
   --reporter <name>     istanbul-reports reporter, repeatable (default: text, or [istanbun].reporters)
@@ -17,29 +18,6 @@ Options:
 Reporters: clover, cobertura, html, html-spa, json, json-summary, lcov, lcovonly,
 teamcity, text, text-lcov, text-summary.
 `
-
-const PARSE_CONFIG: ParseArgsConfig = {
-  options: {
-    'reporter': { type: 'string', multiple: true },
-    'output-dir': { type: 'string' },
-    'lcov': { type: 'string' },
-    'watch': { type: 'boolean' },
-    'help': { type: 'boolean' },
-  },
-  allowPositionals: true,
-  strict: true,
-}
-
-type ParsedArguments = {
-  values: {
-    'reporter'?: string[]
-    'output-dir'?: string
-    'lcov'?: string
-    'watch'?: boolean
-    'help'?: boolean
-  }
-  positionals: string[]
-}
 
 export default class IstanbunCommand {
   private readonly argv: string[]
@@ -86,10 +64,7 @@ export default class IstanbunCommand {
    * @private
    */
   private async execute(): Promise<number> {
-    const parsed: ParsedArguments = parseArgs({
-      ...PARSE_CONFIG,
-      args: this.argv,
-    }) as ParsedArguments
+    const parsed: Cli.Arguments = ArgumentParser.parse(this.argv)
     if (parsed.values.help === true) {
       process.stdout.write(USAGE)
 
@@ -101,7 +76,7 @@ export default class IstanbunCommand {
       outputDirectory: parsed.values['output-dir'],
       lcovPath: parsed.values.lcov,
       watch: parsed.values.watch,
-      bunTestArguments: parsed.positionals,
+      bunTestArguments: parsed.bunTestArguments,
     })
     const result: IstanbunTypes.Result = await istanbun.run()
 

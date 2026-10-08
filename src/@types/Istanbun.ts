@@ -67,6 +67,19 @@ export namespace Bunfig {
   }
 }
 
+export namespace Cli {
+  export type Arguments = {
+    values: {
+      'reporter'?: string[]
+      'output-dir'?: string
+      'lcov'?: string
+      'watch'?: boolean
+      'help'?: boolean
+    }
+    bunTestArguments: string[]
+  }
+}
+
 export type IstanbunErrorCode =
   | 'INVALID_BUNFIG'
   | 'INVALID_LCOV'

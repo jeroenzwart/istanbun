@@ -28,7 +28,7 @@ Renovate waits the same 3 days before it proposes an update (`renovate.json`).
 | ---------------------- | ----------------------------------------------------------- |
 | `bun run build`        | Build `src/` and `bin/` into `dist/` (ESM, CJS and `.d.ts`) |
 | `bun run typecheck`    | Type-check with `tsc --noEmit`                              |
-| `bun run test`         | Run the unit tests in `test/unit`                           |
+| `bun run test:unit`    | Run the unit tests in `test/unit`                           |
 | `bun run lint`         | Run ESLint                                                  |
 | `bun run format`       | Format everything with Prettier                             |
 | `bun run format:check` | Check formatting without writing                            |
@@ -76,7 +76,7 @@ test/
   fixtures/              Fixture project and lcov files
 docs/superpowers/        Design spec and implementation plan
 .github/
-  workflows/             CI (ci.yml) and npm publishing (publish.yml)
+  workflows/             CI (ci.yml), CodeQL analysis (codeql.yml) and npm publishing (publish.yml)
   actions/setup/         Shared job setup: Bun, cached dependencies
 .shipmarkrc.yml          Shipmark release configuration
 bunfig.toml              Bun install settings (security scanner, minimum release age)
@@ -122,10 +122,10 @@ same folder structure as `src/`. Each file has `describe('@/path/Module')` with
 `it('should …')` cases.
 
 ```bash
-bun run test
+bun run test:unit
 ```
 
-Run tests with `bun run test`, not plain `bun test`: plain `bun test` also picks up the
+Run tests with `bun run test:unit`, not plain `bun test`: plain `bun test` also picks up the
 fixture project's own test file in `test/fixtures/project`.
 
 `test/helpers/TemporaryDirectory.ts` gives each spec its own temporary directory, and
@@ -139,7 +139,7 @@ jobs; `build` waits for all four, then builds and smoke-tests the CLI against th
 project. Run the same checks before you push:
 
 ```bash
-bun run format:check && bun run lint && bun run typecheck && bun run test && bun run build
+bun run format:check && bun run lint && bun run typecheck && bun run test:unit && bun run build
 ```
 
 ## Releasing
