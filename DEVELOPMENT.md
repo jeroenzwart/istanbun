@@ -78,7 +78,7 @@ test/
   fixtures/              Fixture project and lcov files
 docs/superpowers/        Design spec and implementation plan
 .github/
-  workflows/             CI (ci.yml), CodeQL analysis (codeql.yml) and npm publishing (publish.yml)
+  workflows/             Checks (checks.yml), CodeQL analysis (codeql.yml) and npm publishing (publish.yml)
   actions/setup/         Shared job setup: Bun, cached dependencies
 .shipmarkrc.yml          Shipmark release configuration
 bunfig.toml              Bun install settings (security scanner, minimum release age)
@@ -136,7 +136,7 @@ spawn a real `bun test` in a copy of the fixture project, so its output appears 
 test results, including the failures those specs cause on purpose. Watch mode is not
 covered: it only ends on Ctrl-C.
 
-CI (`.github/workflows/ci.yml`) runs `format`, `lint`, `typecheck`, `test`, `declutter` and
+The Checks workflow (`.github/workflows/checks.yml`) runs `format`, `lint`, `typecheck`, `test`, `declutter` and
 `complexity` as parallel jobs; `build` waits for all six, then builds and smoke-tests the CLI
 against the fixture project. Run the same checks before you push:
 
@@ -159,7 +159,7 @@ Shipmark derives the version bump from the Conventional Commits since the last t
 `v<version>` tag. Use `--ci patch|minor|major` to skip the prompts and `-p beta|alpha|rc` for a
 prerelease. The configuration lives in `.shipmarkrc.yml`. Do not pass `--create-release`: the workflow creates the GitHub release.
 
-Pushing the tag starts `.github/workflows/publish.yml`. It runs the CI workflow first, then
+Pushing the tag starts `.github/workflows/publish.yml`. It runs the Checks workflow first, then
 checks that the tag matches `package.json`, publishes to npm and creates a GitHub release
 from that version's section in `CHANGELOG.md`. Prereleases (`v1.2.0-beta.1`) are published under
 the npm dist-tag `next` and marked as prerelease on GitHub.
