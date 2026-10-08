@@ -24,16 +24,17 @@ Renovate waits the same 3 days before it proposes an update (`renovate.json`).
 
 ## Scripts
 
-| Command                | What it does                                                |
-| ---------------------- | ----------------------------------------------------------- |
-| `bun run build`        | Build `src/` and `bin/` into `dist/` (ESM, CJS and `.d.ts`) |
-| `bun run typecheck`    | Type-check with `tsc --noEmit`                              |
-| `bun run declutter`    | Find unused exports and types with Knip                     |
-| `bun run test:unit`    | Run the unit tests in `test/unit`                           |
-| `bun run lint`         | Run ESLint                                                  |
-| `bun run format`       | Format everything with Prettier                             |
-| `bun run format:check` | Check formatting without writing                            |
-| `bun run release`      | Release a new version with Shipmark (see Releasing)         |
+| Command                   | What it does                                                    |
+| ------------------------- | --------------------------------------------------------------- |
+| `bun run build`           | Build `src/` and `bin/` into `dist/` (ESM, CJS and `.d.ts`)     |
+| `bun run typecheck`       | Type-check with `tsc --noEmit`                                  |
+| `bun run declutter`       | Find unused exports and types with Knip                         |
+| `bun run test:complexity` | Fail when a file in `src/` has an FTA complexity score above 60 |
+| `bun run test:unit`       | Run the unit tests in `test/unit`                               |
+| `bun run lint`            | Run ESLint                                                      |
+| `bun run format`          | Format everything with Prettier                                 |
+| `bun run format:check`    | Check formatting without writing                                |
+| `bun run release`         | Release a new version with Shipmark (see Releasing)             |
 
 ## Running the CLI locally
 
@@ -135,12 +136,12 @@ spawn a real `bun test` in a copy of the fixture project, so its output appears 
 test results, including the failures those specs cause on purpose. Watch mode is not
 covered: it only ends on Ctrl-C.
 
-CI (`.github/workflows/ci.yml`) runs `format`, `lint`, `typecheck`, `test` and `declutter`
-as parallel jobs; `build` waits for all five, then builds and smoke-tests the CLI against the
-fixture project. Run the same checks before you push:
+CI (`.github/workflows/ci.yml`) runs `format`, `lint`, `typecheck`, `test`, `declutter` and
+`complexity` as parallel jobs; `build` waits for all six, then builds and smoke-tests the CLI
+against the fixture project. Run the same checks before you push:
 
 ```bash
-bun run format:check && bun run lint && bun run typecheck && bun run test:unit && bun run declutter && bun run build
+bun run format:check && bun run lint && bun run typecheck && bun run test:unit && bun run declutter && bun run test:complexity && bun run build
 ```
 
 ## Releasing

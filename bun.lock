@@ -23,6 +23,7 @@
         "bunup": "^0.16.32",
         "eslint": "^10.12.0",
         "eslint-config-prettier": "^10.1.8",
+        "fta-cli": "^3.1.0",
         "knip": "^6.39.0",
         "prettier": "^3.9.9",
         "typescript": "npm:@typescript/typescript6@^6.0.2",
@@ -464,6 +465,8 @@
     "flatted": ["flatted@3.4.4", "", {}, "sha512-5+ybhBZANEJxaH3X5evAFatUxLfEHSr7n6kYJ+1Qd0mUqr4eu9gIf6GDbWHf8RJijHrjjO8G+la14SlL2SeS1Q=="],
 
     "formatly": ["formatly@0.7.1", "", { "dependencies": { "fd-package-json": "^2.0.0", "package-manager-detector": "^1.8.0" }, "bin": { "formatly": "bin/index.mjs" } }, "sha512-ESuCEJE0SGgabl9q+zABI8LhJDmF+8nhpuqDzuM48HfJ9QTD5o6PqFJDFZY7w6f8xsh5lixuj5nJsQNvYOWvKQ=="],
+
+    "fta-cli": ["fta-cli@3.1.0", "", { "bin": { "fta": "index.js" } }, "sha512-l1BUxXSW+oq/uOY9/8aQNW8aNwnywFpnAgB7vW2c2SLJ54DoDgxPy/3gm0yb1Lkm7KZKv/v6GCKJuGJC3JioRw=="],
 
     "get-east-asian-width": ["get-east-asian-width@1.7.0", "", {}, "sha512-XjH1AECxf0giL2V1aU8vKyRR2ppRUb5c0EvT7zuJTokQ74bNo52zOtghqdWIqrhUD79fo3x0WfKZdOqxF6LG1Q=="],
 
