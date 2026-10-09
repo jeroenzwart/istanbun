@@ -109,6 +109,15 @@ automatically.
 `"lcov"`, istanbun stops with a clear message instead of running tests that cannot produce
 an lcov file. When `coverageDir` is set, istanbun reads the lcov file from there.
 
+**`.env` files.** Bun loads `.env`, `.env.development` and `.env.local` when it starts
+istanbun, and `bun test` would see those values as real environment variables, which win
+over `.env.test`. The CLI removes the keys Bun loaded before it starts `bun test`, so your
+tests get the same `.env` files as with a plain `bun test`. Variables from the real
+environment (`KEY=value istanbun`) keep their precedence. This works on Linux and macOS;
+on other platforms the loaded keys still reach `bun test`. The programmatic API passes the
+host's `process.env` to `bun test` as it is, including what Bun loaded from `.env` files for
+the host. Start the host with `bun --no-env-file` to let `bun test` load its own files.
+
 ## Programmatic API
 
 ```typescript

@@ -162,7 +162,9 @@ export default class BunTestRunner {
   }
 
   /**
-   * Spawn `bun test` with inherited stdio so the normal test output stays visible.
+   * Spawn `bun test` with inherited stdio so the normal test output stays visible. The
+   * environment is passed explicitly: without it Bun spawns with the environment it started
+   * with, ignoring keys that were added to or deleted from process.env since.
    *
    * @param {string[]} bunTestArguments Arguments after the coverage flags.
    * @param {RunContext} context Provides the lcov directory and whether it is temporary.
@@ -178,6 +180,7 @@ export default class BunTestRunner {
 
     this.child = Bun.spawn(command, {
       cwd: this.workingDirectory,
+      env: process.env,
       stdio: ['inherit', 'inherit', 'inherit'],
     })
 

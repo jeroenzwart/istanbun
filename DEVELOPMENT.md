@@ -64,7 +64,7 @@ src/
   index.ts               Public package exports
   Istanbun.ts            Facade behind the programmatic API
   @types/                Shared type definitions
-  Cli/                   Argument parsing and the istanbun command
+  Cli/                   Argument parsing, .env cleanup and the istanbun command
   Config/                bunfig.toml reading and the bun test invocation plan
   Coverage/              lcov records → Istanbul coverage map
   Errors/                IstanbunError
