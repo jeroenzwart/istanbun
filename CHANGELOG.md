@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3](https://github.com/jeroenzwart/istanbun/releases/tag/v1.0.3) (2026-10-09)
+
+### Bug Fixes
+
+- **cli:** stop .env values loaded for istanbun leaking into bun test ([4edde83](https://github.com/jeroenzwart/istanbun/commit/4edde838af23593f4a1910b2292ffd5fac9d712b))
+
+### Continuous Integration
+
+- **workflows:** rename CI workflow to Checks ([b9353de](https://github.com/jeroenzwart/istanbun/commit/b9353de4437cfa2829a028f90cec52ec13d43706))
 ## [1.0.2](https://github.com/jeroenzwart/istanbun/releases/tag/v1.0.2) (2026-10-08)
 
 ### Bug Fixes
